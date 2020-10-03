@@ -19,4 +19,5 @@ A tiny Spotify written in Python
 - Heroku for deployment.
 
 ## Screenshots
+I did search for Korn btw
 ![I did search for Korn btw](https://i.imgur.com/Mi6tpUM.png)
