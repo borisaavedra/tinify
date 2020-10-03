@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %} TINIFLY {% endblock %}
+
+{% block content %}
+<header>
+    <a class="anchor" href="{{ url_for('index') }}">
+        <h1>🎶</h1>
+        <h1>Tinify</h1>
+    </a>
+    <h4>Search your music</h3>
+    <p class="text-muted">Write a band, song or album</p>
+    <p class="text-muted"><small>Made with 🤘🏼 by <a href="http://borisaavedra.com">borisaavedra</small></a></p>
+</header>
+<form action="{{ url_for('search') }}" method="POST">
+    <div class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control fix-rounded-right" placeholder="ei: Metallica" name="q" required>
+            <div class="input-group-append">
+                <button class="btn btn-dark" type="submit">Search</button>
+            </div>
+        </div>
+  </div>
+</form>
+<div id="panel-central">
+    <p>
+        <a class="btn btn-outline-light" data-toggle="collapse" href="#collapseArtists" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Artists <span class="badge badge-light"> {{ artists|length }}</span>
+        </a>
+        <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target="#collapseTracks" aria-expanded="false" aria-controls="collapseExample">
+            Songs <span class="badge badge-light"> {{ tracks|length }}</span>
+        </button>
+        <button class="btn btn-outline-light" type="button" data-toggle="collapse" data-target="#collapseAlbums" aria-expanded="false" aria-controls="collapseExample">
+            Albums <span class="badge badge-light"> {{ albums|length }}</span>
+        </button>
+    </p>
+        <div id="spinner" class="spinner-border text-light d-none" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+    <div class="collapse" id="collapseArtists">
+        <div class="card card-body">
+            <div class="card-wrapper">
+                {% for artist in artists%}
+                            <div class="card mb-4" style="width: 18rem;">
+                                <img src="{{ artist['images'] }}" class="card-img-top">
+                                <div class="card-body">
+                                  <h5 class="card-title">{{ artist["name"] }}</h5>
+                                </div>
+                              </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="collapse" id="collapseTracks">  
+        <div class="card card-body">
+            {% for track in tracks %}
+            <div class="mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="player">
+                            {% if track['track_preview'] %}
+                                <audio controls src="{{ track['track_preview'] }}" type="audio/mpeg"></audio>
+                            {% else %}
+                                <p>😢 Not available</p>
+                            {% endif %} 
+                        </div>
+                        <h5 class="card-title">{{ track["track_name"] }}</h5>
+                        {{ track["artist"] }} <br>
+                        {{ track["album_name"] }} <br>
+                        <span class="text-muted"><small>{{ track["track_duration"] }}</small></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="collapse" id="collapseAlbums">
+        <div class="card card-body">
+            <div class="card-wrapper">
+                {% for album in albums %}
+                    <div class="card mb-4" style="width: 18rem;">
+                        <img src="{{ album['album_pic'] }}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ album["album_name"] }}</h5>
+                            <p class="card-text">
+                                {{ album["artist_name"] }}<br>
+                                <span class="text-muted">{{ album["album_release"] }}</span><br>
+                                <span class="text-muted"><small>{{ album["total_tracks"] }} tracks</small></span>   
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>   
+    </div>
+{% endblock %} 
