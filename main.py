@@ -116,18 +116,29 @@ def search():
             # Sort list
             artists.sort(reverse=True, key=lambda artist: (artist["popularity"], artist["name"]))
             tracks.sort(reverse=True, key=lambda track: (track["popularity"], track["track_name"]))
-            session["artist"] = artists
-            session["albums"] = albums
-            session["tracks"] = tracks
-            return redirect(url_for("index", q=q))
+            # session["artist"] = artists
+            # session["albums"] = albums
+            # session["tracks"] = tracks
+
+            data = {
+                "q": q,
+                "artists": artists,
+                "albums": albums,
+                "tracks": tracks
+            }
+
+            return render_template("index.html", **data)
+            # return redirect(url_for("index", q=q))
     else:
         return render_template("index.html")
 
 
-@app.route("/", defaults={"q":None})
-@app.route("/<q>")
-def index(q):
+@app.route("/", defaults={"q":None, "artists":None, "albums":None, "tracks":None})
+# @app.route("/<q>")
+def index(q, artists, albums, tracks):
     if q == None:
         return render_template("index.html")
     else:
-        return render_template("index.html", artists=session["artist"], tracks=session["tracks"], albums=session["albums"])
+        return render_template("index.html", q=q, artists=artists, albums=albums, tracks=tracks)
+        # return render_template("index.html", artists=data["artists"], albums=data["albums"], tracks=data["tracks"])
+        # return render_template("index.html", artists=session["artist"], tracks=session["tracks"], albums=session["albums"])
